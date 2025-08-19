@@ -1,0 +1,37 @@
+shellsage_env/
+
+# Python
+__pycache__/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.nox/
+.tox/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Version control
+.git/
+.hg/
+.svn/
+CVS/
+_darcs/
+.bzr/
+
+# Project specific
+.cache/
+
