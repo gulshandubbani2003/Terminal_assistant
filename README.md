@@ -1,7 +1,6 @@
-# Shell Sage 🐚✨
+AI Terminal Assistant ✨
 
-**Intelligent Terminal Companion | AI-Powered Terminal Assistant**  
-*(Development Preview - v0.2.0)*
+Natural-language to terminal commands with safe auto-execution.
 
 ---
 
@@ -27,8 +26,8 @@ $ rm -rf /important-folder
 ### Natural Language to Commands
 
 ```bash
-# Command generation
-$ shellsage ask "find large files over 1GB"
+# Command generation (shortcut)
+$ sa "find large files over 1GB"
 # → find / -type f -size +1G -exec ls -lh {} \;
 ```
 ![Command generation](screenshots/02.png)
@@ -47,34 +46,18 @@ $ shellsage ask "find large files over 1GB"
 - OpenRouter
 - Deepseek
 
-*Switch providers with `shellsage config --provider <name>`*
+*Switch providers by editing `.env` (see Quick Setup below)*
 
 ---
 
 ## Installation
 
-### Prerequisites
-- Python 3.8+
-- (4GB+ recommended for local models)
+Requirements: Python 3.8+
 
 ```bash
-# 1. Clone & install Shell Sage
-git clone https://github.com/dheerajcl/Terminal_assistant.git
+git clone https://github.com/gulshandubbani2003/Terminal_assistant.git
 cd Terminal_assistant
-./install.sh
-
-# 2. Install Ollama for local AI
-curl -fsSL https://ollama.com/install.sh | sh
-
-# 3. Get base model (3.8GB) 
-#for example
-ollama pull llama3:8b-instruct-q4_1
-
-# or API key (Currently supports Groq, OpenAI, Anthropic, Fireworks, OpenRouter, Deepseek)
-# put your desired provider api in .env file 
-shellsage config --mode api --provider groq
-
-
+pip install -e .
 ```
 
 ### Configuration Notes
@@ -84,83 +67,60 @@ shellsage config --mode api --provider groq
 - Response quality depends on selected model capabilities
 
 
-### Custom Model Selection
+### Configure `.env`
 
-While we provide common defaults for each AI provider, many services offer hundreds of models. To use a specific model:
+Pick ONE mode at a time.
 
-- Check your provider's documentation for available models
-- Set in .env:
+API mode (Gemini recommended):
 ```
-API_PROVIDER=openrouter
-API_MODEL=your-model-name-here  # e.g. google/gemini-2.0-pro-exp-02-05:free
+MODE=api
+ACTIVE_API_PROVIDER=gemini
+API_MODEL=gemini-2.0-flash-exp
+GEMINI_API_KEY=YOUR_API_KEY
+```
 
+Local mode (free/offline via Ollama):
+```
+MODE=local
+OLLAMA_HOST=http://localhost:11434
+LOCAL_MODEL=llama3.2:3b
 ```
 
 ---
 
 
 
-## Configuration
+## Shortcut command `sa` (recommended)
 
-### First-Time Setup
-```bash
-# Interactive configuration wizard
-shellsage setup
-
-? Select operation mode: 
-  ▸ Local (Privacy-first, needs 4GB+ RAM) 
-    API (Faster but requires internet)
-
-? Choose local model:
-  ▸ llama3:8b-instruct-q4_1 (Recommended)
-    mistral:7b-instruct-v0.3
-    phi3:mini-128k-instruct
-
-# If API mode selected:
-? Choose API provider:
-  ▸ Groq
-    OpenAI
-    Anthropic
-    Fireworks
-    Deepseek
-
-? Enter Groq API key: [hidden input]
-
-? Select Groq model:
-  ▸ mixtral-8x7b-32768       
-    llama3-70b-8192         # It isn't necessary to select models from the shown list, you can add any model of your choice supported by your provider in your .env `API_MODEL=`
-
-✅ API configuration updated!
-
+PowerShell (Windows):
+```powershell
+notepad $PROFILE
+# Paste and save:
+function sa {
+  param([Parameter(ValueFromRemainingArguments=$true)][string[]]$args)
+  shellsage ask --execute ($args -join ' ')
+}
+. $PROFILE
 ```
 
-### Runtime Control
-
-```bash
-# Switch modes
-shellsage config --mode api  # or 'local'
-
-
-# Switch to specific model
-shellsage config --mode local --model <model_name>
-
-# Interactive switch
-shellsage config --mode local
-? Select local model: 
-  ▸ llama3:8b-instruct-q4_1 
-    mistral:7b-instruct-v0.3
-    phi3:mini-128k-instruct
+Optional CMD + PowerShell wrapper (create `%USERPROFILE%\\bin\\sa.cmd` and add that folder to PATH):
+```cmd
+@echo off
+powershell -NoProfile -ExecutionPolicy Bypass -Command "shellsage ask --execute ($args -join ' ')" -- %*
 ```
 
-![interactive_flow1](screenshots/03.png)
-
-![interactive_flow2](screenshots/04.png)
+Examples:
+```bash
+sa "list files in current directory"
+sa "create a new txt file named hi.txt and write hello in it"
+sa "ssh -i C:\\Keys\\aws.pem ubuntu@1.2.3.4"
+```
 
 ---
 
 ## Development Status 🚧
 
-Shell Sage is currently in **alpha development**.  
+This project is currently in **alpha development**.  
 
 **Known Limitations**:
 - Limited Windows support
