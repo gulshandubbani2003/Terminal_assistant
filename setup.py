@@ -12,11 +12,15 @@ setup(
         'pyyaml>=6.0.1',
         'inquirer>=3.1.3',
         'ctransformers>=0.2.27',
-        'python-dotenv>=1.0.0'
+        'python-dotenv>=1.0.0',
+        'anthropic>=0.7.0',
+        'google-generativeai>=0.3.0',
+        'rich>=13.0.0'
     ],
     entry_points={
         'console_scripts': [
             'shellsage=shellsage.cli:cli',
+            'sa=shellsage.cli:ask',
         ],
     },
     include_package_data=True,
