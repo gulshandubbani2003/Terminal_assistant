@@ -35,8 +35,8 @@ def run(command, analyze, exit_code):
 
 @cli.command()
 @click.argument('query', nargs=-1, required=True)
-@click.option('--no-execute', is_flag=True, help='Generate command without executing')
-def ask(query, no_execute):
+@click.option('--execute/--no-execute', default=True, help='Execute generated command (default: on)')
+def ask(query, execute):
     """Generate and execute commands with safety checks"""
     console = Console()
     generator = CommandGenerator()
@@ -103,7 +103,7 @@ def ask(query, no_execute):
             padding=0
         ))
         
-        if not no_execute:  # Execute by default unless --no-execute is used
+        if execute:
             if console.input("\n[bold gold1]› Execute command?[/] [[y]/n]: ").lower() != 'n':
                 subprocess.run(clean_command, shell=True)
     else:
