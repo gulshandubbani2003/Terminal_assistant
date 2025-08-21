@@ -165,7 +165,7 @@ class ModelManager:
                 response = self.client.chat.completions.create(
                     model=model,
                     messages=[{"role": "user", "content": prompt}],
-                    temperature=0.1,
+                    temperature=0.0,
                     max_tokens=max_tokens
                 )
                 return response.choices[0].message.content
@@ -178,7 +178,8 @@ class ModelManager:
                 return response.content[0].text
             elif provider == 'gemini':
                 model_instance = self.client.GenerativeModel(model)
-                response = model_instance.generate_content(prompt)
+                # Gemini configuration: use low randomness
+                response = model_instance.generate_content(prompt, generation_config={"temperature": 0.0, "max_output_tokens": max_tokens})
                 return response.text
         except Exception as e:
             raise RuntimeError(f"API Error ({provider}): {str(e)}")
